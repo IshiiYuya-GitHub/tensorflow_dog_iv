@@ -25,8 +25,8 @@ ds_train, ds_val, ds_test = preprocess.resize(train=ds_train,
                                               size=size)
 
 
-ds_train, ds_val, ds_test = preprocess.batch_create(train=ds_train, 
-                                                            val=ds_val, 
+ds_train, ds_val, ds_test = preprocess.batch_create(train=ds_train,
+                                                            val=ds_val,
                                                             test=ds_test,
                                                             NUM_CLASSES=NUM_CLASSES,
                                                             BATCH_SIZE=BATCH_SIZE,
@@ -37,8 +37,8 @@ model, lr = post_process.build_model(NUM_CLASSES=NUM_CLASSES, IMG_SIZE=IMG_SIZE)
 model.load_weights(post_process.checkpoint(num=0, IMG_SIZE=IMG_SIZE))
 
 # es_callback = post_process.early_stopping()
-# tb_callback = post_process.tensorboard(BATCH_SIZE=BATCH_SIZE, 
-#                                        lr=lr, 
+# tb_callback = post_process.tensorboard(BATCH_SIZE=BATCH_SIZE,
+#                                        lr=lr,
 #                                        IMG_SIZE=IMG_SIZE)
 # cp_callback = post_process.checkpoint_callback(num=0, IMG_SIZE=IMG_SIZE)
 
@@ -67,13 +67,7 @@ model.load_weights(post_process.checkpoint(num=0, IMG_SIZE=IMG_SIZE))
 # print('test loss :', loss, 'Test accuracy :', accuracy)
 
 
-# plt.figure(figsize=(10, 10))
-# for image, label in ds_test.take(1):
-#     plt.imshow(image[0])
-#     plt.show()
-    # prediction = model.predict(image)
-    # print(np.argmax(prediction[0]))
-    # print(tf.argmax(label[0]))
+
 
 # 予測
 label_names = []
@@ -82,19 +76,22 @@ for name in names:
 
 image_batch, label_batch = ds_test.as_numpy_iterator().next()
 predictions = model.predict_on_batch(image_batch)
+predict_num_label = 10
+predict_num = predict_num_label**2
 count = 0
 
+
 plt.figure(figsize=(100, 100))
-for i in range(BATCH_SIZE):
+for i in range(predict_num):
   print(np.argmax(predictions[i]))
   print(tf.argmax(label_batch[i]))
   if np.argmax(predictions[i]) == tf.argmax(label_batch[i]):
     count += 1
-  ax = plt.subplot(10, 10, i+1)
+  ax = plt.subplot(predict_num_label, predict_num_label, i+1)
   plt.imshow(image_batch[i].astype("uint8"))
   if np.argmax(predictions[i]) == tf.argmax(label_batch[i]):
     plt.title(label_names[tf.argmax((label_batch[i]))], fontsize=50, color='blue')
   else:
-    plt.title('correct:' + label_names[tf.argmax((label_batch[i]))] + ', prediction:' + label_names[np.argmax(predictions[i])], fontsize=20, color='red') 
+    plt.title('correct:' + label_names[tf.argmax((label_batch[i]))] + ', prediction:' + label_names[np.argmax(predictions[i])], fontsize=20, color='red')
   plt.axis("off")
-print(f'correct:{count}, uncorrect:{BATCH_SIZE-count}')
+print(f'correct:{count}, incorrect:{predict_num-count}')
