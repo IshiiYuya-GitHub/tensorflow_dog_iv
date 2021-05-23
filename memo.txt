@@ -1,0 +1,15 @@
+EfficientNetB0 – (224, 224, 3)
+
+EfficientNetB1 – (240, 240, 3)
+
+EfficientNetB2 – (260, 260, 3)
+
+EfficientNetB3 – (300, 300, 3)
+
+EfficientNetB4 – (380, 380, 3)
+
+EfficientNetB5 – (456, 456, 3)
+
+EfficientNetB6 – (528, 528, 3)
+
+EfficientNetB7 – (600, 600, 3)
